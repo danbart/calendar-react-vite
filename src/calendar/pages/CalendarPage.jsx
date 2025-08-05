@@ -1,46 +1,27 @@
 
-import { addHours } from 'date-fns';
 import { useState } from 'react';
 import { Calendar } from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
-import { CalendarEventBox, CalendarModal, NavBar } from "../";
+import { CalendarEventBox, CalendarModal, FabAddNew, NavBar } from "../";
 import { getMessagesEs, localizer } from '../../helpers';
+import { useCalendarStore, useUiStore } from '../../hooks';
 
-
-
-
-
-
-const myEventsList = [
-    {
-        title: 'Big Meeting',
-        notes: 'Important meeting with the client.',
-        start: new Date(),
-        end: addHours(new Date(), 2),
-        allDay: false,
-    },
-    {
-        title: 'Vacation',
-        notes: 'Time off for vacation.',
-        start: new Date(),
-        end: addHours(new Date(), 2),
-        allDay: true,
-    },
-]
-
-const onDoubleClickEvent = (event) => {
-    console.log("🚀 ~ onDoubleClickEvent ~ event:", event)
-}
-const onSelectEvent = (event) => {
-    console.log("🚀 ~ onSelectEvent ~ event:", event)
-}
-const onEventChange = (event) => {
-    localStorage.setItem('lastView', event);
-}
 export const CalendarPage = () => {
+
+    const { openDateModal } = useUiStore();
+    const { events, setActiveEvent } = useCalendarStore();
 
     const [view, setView] = useState(localStorage.getItem('lastView') || 'month');
 
+    const onDoubleClickEvent = () => {
+        openDateModal();
+    }
+    const onSelectEvent = (event) => {
+        setActiveEvent(event);
+    }
+    const onEventChange = (event) => {
+        localStorage.setItem('lastView', event);
+    }
     const eventPropGetter = (event, start, end, isSelected) => {
         const style = {
             backgroundColor: '#367CF7',
@@ -60,7 +41,7 @@ export const CalendarPage = () => {
 
             <Calendar
                 localizer={localizer}
-                events={myEventsList}
+                events={events}
                 defaultView={view}
                 startAccessor="start"
                 endAccessor="end"
@@ -77,6 +58,7 @@ export const CalendarPage = () => {
             />
 
             <CalendarModal />
+            <FabAddNew />
         </>
     )
 }

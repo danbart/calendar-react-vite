@@ -54,10 +54,6 @@
     z-index: 9999;
 }
 
-.fab i {
-    padding: 0;
-}
-
 .fab-danger {
     border-radius: 100%;
     bottom: 25px;
@@ -66,4 +62,5 @@
     left: 25px;
     width: 70px;
     height: 70px;
+    z-index: 9999;
 }
